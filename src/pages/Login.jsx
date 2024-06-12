@@ -32,7 +32,9 @@ export default function Login() {
               </label>
               <input
                 placeholder="Username"
-                {...register("username")}
+                {...register("username", {
+                  required: "Required",
+                })}
                 className="input-primary"
               />
               {errors.username && (
@@ -45,7 +47,9 @@ export default function Login() {
               </label>
               <input
                 placeholder="Password"
-                {...register("password")}
+                {...register("password", {
+                  required: "Required",
+                })}
                 className="input-primary"
               />
               {errors.password && (

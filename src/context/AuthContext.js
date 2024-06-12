@@ -12,36 +12,38 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.interceptors.response.use(response => {
-      return response;
-   }, error => {
-     if (error.response.status === 401) {
-      navigate("/login");
-     }
-     return error;
-   });
+    axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.response.status === 401) {
+          navigate("/login");
+        }
+        return error;
+      }
+    );
     const token = Cookies.get("token");
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      setUser({ token, user: JSON.parse(localStorage.getItem("user")) });
+      setUser({ token });
     } else {
-      navigate("/login");
+      // navigate("/login");
     }
   }, []);
 
   const login = async (nationalcode, otp, setLoading) => {
     setLoading(true);
     await axios
-      .post(`${apiUrl}/injured/verify`, {
+      .post(`${apiUrl}/verify`, {
         nationalcode,
         otp,
       })
       .then((result) => {
         const res = result.data;
         Cookies.set("token", res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
         axios.defaults.headers.common["Authorization"] = `Bearer ${res.token}`;
-        setUser({ token: res.token, user: res.user });
+        setUser({ token: res.token });
         navigate("/");
       })
       .catch(() => {
@@ -52,7 +54,6 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     Cookies.remove("token");
-    localStorage.removeItem("user");
     setUser(null);
     delete axios.defaults.headers.common["Authorization"];
     navigate("/login");

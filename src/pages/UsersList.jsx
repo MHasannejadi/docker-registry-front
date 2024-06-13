@@ -1,44 +1,21 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
-import apiUrl from "../api/shared";
+import { apiUrl } from "../api/shared";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
 function UsersList() {
-  const [users, setUsers] = useState([
-    {
-      username: "ali",
-      email: "mail@email.ir",
-      role: "DEVELOPER",
-      pullDailyLimit: 50,
-      pushDailyLimit: 50,
-    },
-    {
-      username: "mohammad ali",
-      email: "moali@email.ir",
-      role: "ADMIN",
-      pullDailyLimit: 50,
-      pushDailyLimit: 50,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState({
-    username: "rahim",
-    email: "mail@email.ir",
-    role: "DEVELOPER",
-    pullDailyLimit: 50,
-    pushDailyLimit: 50,
-  });
+  const [currentUser, setCurrentUser] = useState(null);
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/v1/user/list`
-      );
+      const response = await axios.get(`${apiUrl}/api/v1/user/list`);
       if (response?.data) {
         setUsers(response.data);
       }
@@ -100,7 +77,7 @@ function UsersList() {
     <div>
       <Navbar />
       <main>
-        <ul className="w-fit m-auto mt-6 bg-gray-800 text-white rounded-xl p-6 pb-8">
+        <ul className="w-fit min-w-[40rem] m-auto mt-6 bg-gray-800 text-white rounded-xl p-6 pb-8">
           <h2 className="font-bold text-3xl text-center">Users List</h2>
           {loading && <p className="text-center mt-4">Loading...</p>}
           {!loading && users?.length === 0 && (

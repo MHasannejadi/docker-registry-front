@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
+import { apiUrl } from "../api/shared";
 
 const AddUser = () => {
   const {
@@ -16,7 +17,7 @@ const AddUser = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("/api/v1/register", data);
+      const response = await axios.post(`${apiUrl}/api/v1/register`, data);
       if (response?.data) {
         toast.success("User added successfully");
         reset();

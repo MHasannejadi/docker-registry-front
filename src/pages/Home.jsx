@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import apiUrl from "../api/shared";
+import { apiUrl } from "../api/shared";
 import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 
 export const debounce = (func, delay) => {
   let timeout;
@@ -26,7 +27,11 @@ function Home() {
       const response = await axios.get(
         `${apiUrl}/api/v1/image/list?chars=${query}`
       );
-      setImages(response.data);
+      if (response?.data) {
+        setImages(response.data);
+      } else {
+        toast.error("Something went wrong");
+      }
     } catch (error) {
       console.error("Error fetching images:", error);
     } finally {
@@ -67,7 +72,7 @@ function Home() {
             />
           </div>
           {loading && <p className="text-center mt-4">Loading...</p>}
-          {!loading && images?.length === 0 && search && (
+          {!loading && images?.length === 0 && (
             <p className="text-center mt-4">No images found.</p>
           )}
           {images?.map((img) => (

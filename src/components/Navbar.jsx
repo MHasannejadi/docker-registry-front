@@ -13,12 +13,12 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="users-list" className="text-white font-bold text-lg">
+            <Link to="/users-list" className="text-white font-bold text-lg">
               Users List
             </Link>
           </li>
           <li>
-            <Link to="add-user" className="text-white font-bold text-lg">
+            <Link to="/add-user" className="text-white font-bold text-lg">
               Add User
             </Link>
           </li>

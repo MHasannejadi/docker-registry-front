@@ -6,7 +6,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   html {
     @apply text-primary;
@@ -16,6 +15,9 @@
   }
   button:disabled:hover {
     @apply !opacity-60;
+  }
+  input {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
   }
   button:disabled {
     @apply !opacity-60;

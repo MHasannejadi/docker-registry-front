@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import apiUrl from "../api/shared";
-import { debounce } from "./Home";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -10,22 +9,21 @@ Modal.setAppElement("#root");
 function UsersList() {
   const [users, setUsers] = useState([
     {
-      username: "rahim",
+      username: "ali",
       email: "mail@email.ir",
       role: "DEVELOPER",
       pullDailyLimit: 50,
       pushDailyLimit: 50,
     },
     {
-      username: "mohammad",
-      email: "mail@email.ir",
+      username: "mohammad ali",
+      email: "moali@email.ir",
       role: "ADMIN",
       pullDailyLimit: 50,
       pushDailyLimit: 50,
     },
   ]);
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({
     username: "rahim",
@@ -35,36 +33,24 @@ function UsersList() {
     pushDailyLimit: 50,
   });
 
-  const handleSearch = (e) => setSearch(e.target.value);
-
-  const fetchUsers = async (query) => {
+  const fetchUsers = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${apiUrl}/api/v1/image/list?chars=${query}`
+        `${apiUrl}/api/v1/user/list`
       );
       if (response?.data) {
         setUsers(response.data);
       }
     } catch (error) {
-      console.error("Error fetching images:", error);
+      console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const debouncedFetchImages = useCallback(debounce(fetchUsers, 500), []);
-
   useEffect(() => {
-    if (search) {
-      debouncedFetchImages(search);
-    } else {
-      //   setUsers([]);
-    }
-  }, [search, debouncedFetchImages]);
-
-  useEffect(() => {
-    // fetchImages();
+    fetchUsers();
   }, []);
 
   const openModal = (user) => {
@@ -89,7 +75,7 @@ function UsersList() {
     try {
       await axios.put(`${apiUrl}/api/v1/user`, currentUser);
       closeModal();
-      fetchUsers(search);
+      fetchUsers();
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -116,24 +102,12 @@ function UsersList() {
       <main>
         <ul className="w-fit m-auto mt-6 bg-gray-800 text-white rounded-xl p-6 pb-8">
           <h2 className="font-bold text-3xl text-center">Users List</h2>
-          <div className="flex gap-4 mt-8 items-center pb-6">
-            <label className="font-bold" htmlFor="">
-              Search
-            </label>
-            <input
-              type="text"
-              placeholder="Search"
-              value={search}
-              onChange={handleSearch}
-              className="px-4 py-2 rounded-lg text-black w-full"
-            />
-          </div>
           {loading && <p className="text-center mt-4">Loading...</p>}
-          {!loading && users?.length === 0 && search && (
+          {!loading && users?.length === 0 && (
             <p className="text-center mt-4">No Users found.</p>
           )}
           {users?.map((user) => (
-            <li key={user.image}>
+            <li key={user.username}>
               <div className="flex mt-6 flex-col">
                 <h3 className="font-bold text-xl mb-2">{user.username}</h3>
                 <div className="flex gap-6 items-center flex-wrap justify-between">

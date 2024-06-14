@@ -32,12 +32,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (nationalcode, otp, setLoading) => {
+  const login = async (username, password, setLoading) => {
     setLoading(true);
     await axios
       .post(`${apiUrl}/verify`, {
-        nationalcode,
-        otp,
+        username,
+        password,
       })
       .then((result) => {
         const res = result.data;

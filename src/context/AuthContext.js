@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser({ token });
     } else {
-      // navigate("/login");
+      navigate("/login");
     }
   }, []);
 
